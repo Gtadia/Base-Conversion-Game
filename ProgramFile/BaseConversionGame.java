@@ -1,5 +1,4 @@
-package ProgramFile; 
-
+package ProgramFile;
 //I imported the javax.swing package, which was built into the java programming language
 import javax.swing.*;
 
@@ -36,14 +35,14 @@ public class BaseConversionGame extends JFrame implements ActionListener {
     private JLabel conversionQuestion, statCorrect, statAccuracy, statIncorrect, statScore, onQuestionNum, correctLabel, conversionType, questionReviewTitle;
     private JTable correctQuestionTable, incorrectQuestionTable;
     private JButton answer1, answer2, answer3, answer4;
-    private JPanel conversionPanel, quizPanel, welcomePanel, infoPanel, numQuestionsPanel, userStaticsPanel, questionReviewPanel;
+    private JPanel conversionPanel, quizPanel, welcomePanel, infoPanel, numQuestionsPanel, difficultyPanel, userStaticsPanel, questionReviewPanel;
     private JFrame frame;
 
     public String originalOption, convertedOption;
 
     public int questionNumber, numAttempts, numCorrect,  numIncorrect;
     public Random random = new Random();
-    public int maxValue = 512;
+    public int difficultyLevel = 0;
 
     public ArrayList<String> binaryArray, hexadecimalArray, octalArray, questionData, isCorrect;
     public List<ArrayList<String>> quesReviewData = new ArrayList<ArrayList<String>>();
@@ -61,6 +60,7 @@ public class BaseConversionGame extends JFrame implements ActionListener {
         numQuestionsPanel = new JPanel();
         userStaticsPanel = new JPanel();
         questionReviewPanel = new JPanel();
+        difficultyPanel = new JPanel();
 
         conversionPanel.setLayout(null);
         quizPanel.setLayout(null);
@@ -69,6 +69,7 @@ public class BaseConversionGame extends JFrame implements ActionListener {
         numQuestionsPanel.setLayout(null);
         userStaticsPanel.setLayout(null);
         questionReviewPanel.setLayout(null);
+        difficultyPanel.setLayout(null);
 
         JLabel welcome = new JLabel("Base Conversion Game"); //The name of the program is displayed on the welcome menu as a title
         welcome.setFont(new Font("Serif", Font.PLAIN, 60));
@@ -129,7 +130,7 @@ public class BaseConversionGame extends JFrame implements ActionListener {
                 "5. After you finish all the questions, you'll see how well you did/your statics <br>" +
                 "6. After checking your statics, press next to continue to review your questions <br>" +
                 "7. After you to review your questions you got correct/incorrect, you can choose to return to the base conversion menu or go back to the statics panel <br>" +
-                "TIP: <br>- The maximum value for the bases is " + maxValue + " (in decimal values)";
+                "TIP: <br>- The maximum value for the bases is " + difficultyLevel + " (in decimal values)";
         JLabel info = new JLabel("<html>" + howToPlay + "</html>"); //Displays the directions of the game/howToPlay (shown above)
         info.setFont(new Font("Serif", Font.PLAIN, 23));
         info.setBounds(300, 80, 700, 400);
@@ -185,7 +186,7 @@ public class BaseConversionGame extends JFrame implements ActionListener {
                     questionReviewTitle.setText(origBase + " to " + convertBase + " Question Review");
 
                     frame.remove(conversionPanel);
-                    frame.setContentPane(numQuestionsPanel);
+                    frame.setContentPane(difficultyPanel);
                     frame.validate();
                 } else { //An error message on the next line of code will show if certain conditions in the if statement above was not met
                     String warningMessage = "Please selected a value/one value for the original number <br>" +
@@ -197,6 +198,83 @@ public class BaseConversionGame extends JFrame implements ActionListener {
         });
         conversionNext.setBounds(680, 580, 200, 80);
         conversionPanel.add(conversionNext);
+
+        JLabel difficultyLabel = new JLabel("Select The Difficulty");
+        difficultyLabel.setFont(new Font("Serif", Font.BOLD, 60));
+        difficultyLabel.setBounds(435, 0, 800, 80);
+        difficultyPanel.add(difficultyLabel);
+
+         // Button difficulty (Making sure that you have the appropriate value for the oringalBase (ex. gettting 4, 8, and 16 binary places for the easy, medium, and hard difficulities respectively)).
+        JButton difficultyEasy = new JButton("Easy");
+        difficultyEasy.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(originalBase.getSelectedValue() == "Binary") {
+                    difficultyLevel = 16;
+                } else if(originalBase.getSelectedValue() == "Octal") {
+                    difficultyLevel = 64;
+                } else if(originalBase.getSelectedValue() == "Decimal") {
+                    difficultyLevel = 100;
+                } else {
+                    difficultyLevel = 256;
+                }
+            }
+        });
+        difficultyEasy.setFont(new Font("Serif", Font.PLAIN, 30));
+        difficultyEasy.setBounds(400, 120, 600, 120);
+        difficultyPanel.add(difficultyEasy);
+
+        JButton difficultyMedium = new JButton("Medium");
+        difficultyMedium.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { 
+                if(originalBase.getSelectedValue() == "Binary") {
+                    difficultyLevel = 128;
+                } else if(originalBase.getSelectedValue() == "Octal") {
+                    difficultyLevel = 512;
+                } else if(originalBase.getSelectedValue() == "Decimal") {
+                    difficultyLevel = 1000;
+                } else {
+                    difficultyLevel = 4096;
+                }
+            }
+        });
+        difficultyMedium.setFont(new Font("Serif", Font.PLAIN, 30));
+        difficultyMedium.setBounds(400, 250, 600, 120);
+        difficultyPanel.add(difficultyMedium);
+
+        JButton difficultyHard = new JButton("Hard");
+        difficultyHard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(originalBase.getSelectedValue() == "Binary") {
+                    difficultyLevel = 65536;
+                } else if(originalBase.getSelectedValue() == "Octal") {
+                    difficultyLevel = 4096;
+                } else if(originalBase.getSelectedValue() == "Decimal") {
+                    difficultyLevel = 10000;
+                } else {
+                    difficultyLevel = 65536;
+                }
+            }
+        });
+        difficultyHard.setFont(new Font("Serif", Font.PLAIN, 30));
+        difficultyHard.setBounds(400, 380, 600, 120);
+        difficultyPanel.add(difficultyHard);
+
+
+        JButton difficultyNextButton = new JButton("Next");
+        difficultyNextButton.setFont(new Font("Serif", Font.BOLD, 60));
+        difficultyNextButton.setBounds(580, 550, 250, 100);
+        difficultyNextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.remove(difficultyPanel);
+                frame.setContentPane(numQuestionsPanel);
+                frame.validate();
+            }
+        });
+        difficultyPanel.add(difficultyNextButton);
 
         JButton conversionBack = new JButton("Back"); //This button brings the user back to the welcome panel from the conversionPanel
         conversionBack.setFont(new Font("Serif", Font.PLAIN, 30));
@@ -229,6 +307,10 @@ public class BaseConversionGame extends JFrame implements ActionListener {
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Binary();
+                Octal();
+                Hexadecimal();
+
                 questionNumber = 1;
                 numCorrect = 0;
                 numIncorrect = 0;
@@ -381,23 +463,23 @@ public class BaseConversionGame extends JFrame implements ActionListener {
     //Creates the binaryArray and fills it with binary values from 1 to maxValue (512)
     public void Binary() {
         binaryArray = new ArrayList<>();
-        for (int i = 1; i <= maxValue; i++) {
+        for (int i = 1; i <= difficultyLevel; i++) {
             binaryArray.add(Integer.toBinaryString(i));
-        }
+        }        
     }
 
     //Creates the octalArray and fills it with octal values from 1 to maxValue (512)
     public void Octal() {
         octalArray = new ArrayList<>();
-        for (int i = 1; i <= maxValue; i++) {
+        for (int i = 1; i <= difficultyLevel; i++) {
             octalArray.add(Integer.toOctalString(i));
         }
     }
 
-    //Creates the hexadecimalArray and fills it with hexadecimal values from 1 to maxValue (512)
+    //Creates the hexadecimalArray and fills it with hexadecimal values from 1 to difficultyLevel's value
     public void Hexadecimal() {
         hexadecimalArray = new ArrayList<>();
-        for (int i = 1; i <= maxValue; i++) {
+        for (int i = 1; i <= difficultyLevel; i++) {
             hexadecimalArray.add(Integer.toHexString(i));
         }
     }
@@ -408,24 +490,29 @@ public class BaseConversionGame extends JFrame implements ActionListener {
     * If two answer choices are the same, either that be one of the wrong answers or the correct answer, then it restarts
     * the procedure before it is saved to the array.
     */
-    public ArrayList<String> wrongAnswerGenerator(String numBase, String correctAnswer) {
+public ArrayList<String> wrongAnswerGenerator(String numBase, String correctAnswer) {
         ArrayList<String> randWrongAnsArray = new ArrayList<>();
         String wrongAnswer;
         for(int i = 0; i < 3; i++) {
-            if(numBase == "binary") {
-                wrongAnswer = binaryArray.get(random.nextInt(maxValue - 1));
-            } else if(numBase == "octal") {
-                wrongAnswer = octalArray.get(random.nextInt(maxValue - 1));
-            } else if (numBase == "decimal") {
-                wrongAnswer = String.valueOf(random.nextInt(maxValue));
-            } else {
-                wrongAnswer = hexadecimalArray.get(random.nextInt(maxValue - 1));
-            }
 
-            if(wrongAnswer == correctAnswer || randWrongAnsArray.contains(wrongAnswer)) {
-                wrongAnswerGenerator(numBase, correctAnswer);
+            while(true) {
+                if(numBase == "binary") {
+                    wrongAnswer = binaryArray.get(random.nextInt(difficultyLevel - 1));
+                } else if(numBase == "octal") {
+                    wrongAnswer = octalArray.get(random.nextInt(difficultyLevel - 1));
+                } else if (numBase == "decimal") {
+                    wrongAnswer = String.valueOf(random.nextInt(difficultyLevel));
+                } else {
+                    wrongAnswer = hexadecimalArray.get(random.nextInt(difficultyLevel - 1));
+                }
+
+                if(!correctAnswer.equals(wrongAnswer)){
+                    if(!(randWrongAnsArray.contains(wrongAnswer))) {
+                        randWrongAnsArray.add(wrongAnswer);
+                        break;
+                    }
+                }
             }
-            randWrongAnsArray.add(wrongAnswer);
         }
         return randWrongAnsArray;
     }
@@ -452,16 +539,16 @@ public class BaseConversionGame extends JFrame implements ActionListener {
         Hexadecimal();
 
         if (originalOption.contains("Binary")) {
-            originalAnswer = binaryArray.get(random.nextInt(maxValue - 1));
+            originalAnswer = binaryArray.get(random.nextInt(difficultyLevel - 1));
             numBase = 2;
         } else if (originalOption.contains("Octal")) {
-            originalAnswer = octalArray.get(random.nextInt(maxValue - 1));
+            originalAnswer = octalArray.get(random.nextInt(difficultyLevel - 1));
             numBase = 8;
         } else if (originalOption.contains("Decimal")) {
-            originalAnswer = String.valueOf(random.nextInt(maxValue));
+            originalAnswer = String.valueOf(random.nextInt(difficultyLevel));
             numBase = 10;
         } else if (originalOption.contains("Hexadecimal")) {
-            originalAnswer = hexadecimalArray.get(random.nextInt(maxValue - 1));
+            originalAnswer = hexadecimalArray.get(random.nextInt(difficultyLevel - 1));
             numBase = 16;
         }
 
